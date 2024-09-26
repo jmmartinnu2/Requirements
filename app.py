@@ -1,6 +1,49 @@
 import streamlit as st
 import pandas as pd
 import os
+from io import StringIO
+from fpdf import FPDF
+
+# Función personalizada de FPDF para trabajar con UTF-8
+class PDF(FPDF):
+    def header(self):
+        self.set_font("Arial", "B", 12)
+        self.cell(0, 10, "Player Recruitment Report", 0, 1, "C")
+
+    def chapter_title(self, title):
+        self.set_font("Arial", "B", 12)
+        self.cell(0, 10, title, 0, 1, "L")
+        self.ln(4)
+
+    def chapter_body(self, body):
+        self.set_font("Arial", "", 12)
+        self.multi_cell(0, 10, body)
+        self.ln()
+
+    def add_chapter(self, title, body):
+        self.add_page()
+        self.chapter_title(title)
+        self.chapter_body(body)
+
+# Función para generar el archivo PDF
+def generar_pdf(datos):
+    pdf = PDF()
+    pdf.add_page()
+
+    pdf.set_font("Arial", size=12)
+    for key, value in datos.items():
+        text = f"{key}: {value}"
+        pdf.multi_cell(0, 10, text.encode('latin-1', 'replace').decode('latin-1'))  # Codificar y reemplazar caracteres no compatibles
+
+    return pdf.output(dest='S').encode('latin1')
+
+# Función para generar el archivo CSV en memoria
+def generar_csv(datos):
+    df = pd.DataFrame([datos])
+    output = StringIO()
+    df.to_csv(output, index=False)
+    processed_data = output.getvalue()
+    return processed_data
 
 # Inicializar session_state para evitar errores
 if 'jugador' not in st.session_state:
@@ -178,6 +221,22 @@ if idioma == "English":
         guardar_datos(datos)
         st.success("Report successfully submitted and saved.")
         st.session_state['jugadores_observados'] = []
+        
+        
+
+        # Generar PDF
+        pdf_data = generar_pdf(datos)
+
+        # Botón para descargar el PDF
+        st.download_button(
+            label="Download PDF",
+            data=pdf_data,
+            file_name="report.pdf",
+            mime="application/pdf"
+        )
+
+
+        
 
 # Formulario en español
 else:
@@ -273,3 +332,16 @@ else:
         }
         guardar_datos(datos)
         st.success("Informe enviado correctamente y guardado.")
+ 
+
+
+        # Generar PDF
+        pdf_data = generar_pdf(datos)
+
+        # Botón para descargar el PDF
+        st.download_button(
+            label="Descargar PDF",
+            data=pdf_data,
+            file_name="report.pdf",
+            mime="application/pdf"
+        )
