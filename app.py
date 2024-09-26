@@ -201,16 +201,16 @@ if idioma == "English":
     # 5. Field to select if the player is a free agent or not
     with st.expander("5. Current contract"):
         free_agent = st.radio(
-            "Is the player a free agent?", 
+            "Do you want the player to be a Free Agent?", 
             ("Yes", "No"), 
             key='free_agent'
         )
 
     # If the player is not a free agent, show field for contract end date
     if free_agent == "No":
-        contract_end = st.date_input("Contract End Date", key='contract_end')
+        contract_end =  st.text_input("Enter the amount the club can afford to pay for the player", key='contract_end')
     else:
-        contract_end = "N/A"  # If the player is a free agent, no contract end date is required
+        contract_end = "Unspecified"  # If the player is a free agent, no contract end date is required
 
     # Submit Button
     if st.button("Submit Report"):
@@ -315,16 +315,16 @@ else:
     #   5. Campo para seleccionar si el jugador es Agente Libre o no
     with st.expander("5. Contrato actual"):
         agente_libre = st.radio(
-            "¿El jugador es agente libre?", 
+            "¿Quieren el jugador Agente Libre?", 
             ("Sí", "No"), 
             key='agente_libre'
         )
 
     # Si no es agente libre, mostrar campo para la fecha de finalización de contrato
     if agente_libre == "No":
-        contract_end = st.date_input("Fecha de finalización del contrato", key='contract_end')
+        contract_end =  st.text_input("Ingrese lo que puede llegar a pagar el club por el jugador/a", key='contract_end')
     else:
-        contract_end = "N/A"  # Si es agente libre, no se requiere fecha de finalización del contrato
+        contract_end = "Sin especificar"  # Si es agente libre, no se requiere fecha de finalización del contrato
 
     # Botón de Enviar
     if st.button("Enviar Informe"):
