@@ -84,6 +84,8 @@ if idioma == "English":
     st.subheader("Player Recruitment Needs")
 
     # 1. Positions to Strengthen
+    # Campo para el nombre del club
+    club_name = st.text_input("Name of the Club", key='club_name')
     with st.expander("1. Positions to Strengthen"):
         position = st.selectbox(
             "Select the priority position you want to strengthen",
@@ -159,6 +161,7 @@ if idioma == "English":
     # Submit Button
     if st.button("Submit Report"):
         datos = {
+            "Name of Club": club_name,
             "Position": position,
             "Ideal Age": ideal_age,
             "Competitive Experience": competitive_experience,
@@ -181,7 +184,9 @@ else:
     st.subheader("Necesidades de Incorporación de Jugadores")
 
     # 1. Posiciones a Refuerzar
+    nombre_club = st.text_input("Nombre del club", key='nombre_club')
     with st.expander("1. Posiciones a Refuerzar"):
+        
         position = st.selectbox(
             "Seleccione la posición prioritaria que desea reforzar",
             ["Portero", "Defensa Central", "Lateral Izquierdo", "Lateral Derecho",
@@ -254,6 +259,7 @@ else:
     # Botón de Enviar
     if st.button("Enviar Informe"):
         datos = {
+            "Nombre del Club": nombre_club,
             "Posiciones": position,
             "Edad Ideal": ideal_age,
             "Experiencia Competitiva": competitive_experience,
