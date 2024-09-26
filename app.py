@@ -3,8 +3,32 @@ import pandas as pd
 import os
 from io import StringIO
 from fpdf import FPDF
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+from reportlab.lib.styles import getSampleStyleSheet
 
 
+# Configurar tema oscuro
+st.set_page_config(layout="wide")
+st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: #1f1f1f;
+        color: white;
+    }
+    .sidebar .sidebar-content {
+        background: #333333;
+        color: white;
+    }
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True
+)
 
 # Función personalizada de FPDF para trabajar con UTF-8
 class PDF(FPDF):
@@ -27,17 +51,87 @@ class PDF(FPDF):
         self.chapter_title(title)
         self.chapter_body(body)
 
-# Función para generar el archivo PDF
+
+# Función para agregar la marca de agua (tu nombre o licencia)
+def add_watermark(canvas, doc):
+    canvas.saveState()
+    canvas.setFont('Helvetica-Bold', 20)
+    canvas.setStrokeColor(colors.lightgrey)
+    canvas.setFillColor(colors.lightgrey)
+    width, height = letter
+
+    # Texto de la marca de agua (nombre o licencia)
+    watermark_text = "Jose Maria Martin Nuñez - Licence FIFA Nº 202406-6950"
+
+    # Dibujar la marca de agua repetida en varias posiciones
+    for x in range(0, int(width), 150):  # Cada 200 unidades en el eje x
+        for y in range(0, int(height),200):  # Cada 150 unidades en el eje y
+            canvas.saveState()
+            canvas.translate(x, y)
+            canvas.rotate(45)  # Rotar la marca de agua en diagonal
+            canvas.drawCentredString(0, 0, watermark_text)  # Texto de la marca de agua
+            canvas.restoreState()
+
+    canvas.restoreState()
+
+# Función para generar el PDF con mejor diseño visual y sin colores en la tabla
 def generar_pdf(datos):
-    pdf = PDF()
-    pdf.add_page()
+    # Crear el documento PDF
+    doc = SimpleDocTemplate("report.pdf", pagesize=letter)
+    elements = []
+    styles = getSampleStyleSheet()
 
-    pdf.set_font("Arial", size=12)
+    # Espaciado general
+    general_spacer = Spacer(1, 12)
+
+    # Título principal: Nombre de Agente FIFA
+    titulo_fifa = Paragraph("Report for FIFA Agent:<br/><b>José Mª Martín Núñez - LIcence: 202406-6950</b>", styles["Title"])
+    elements.append(titulo_fifa)
+    elements.append(Spacer(1, 12))
+
+    # Línea divisoria
+    elements.append(Spacer(1, 6))
+    elements.append(Paragraph('<hr width="100%" color="gray" size="1">', styles["Normal"]))
+
+    # Título secundario: Nombre del club recogido del formulario
+    nombre_club = datos.get("Name of Club", "Club name not available")
+    titulo_club = Paragraph(f"<b>Club:</b> {nombre_club}", styles["Title"])
+    elements.append(titulo_club)
+    elements.append(Spacer(1, 24))
+
+    # Línea divisoria
+    elements.append(Paragraph('<hr width="100%" color="gray" size="1">', styles["Normal"]))
+    elements.append(general_spacer)
+
+    # Estructura en dos columnas: Claves (a la izquierda) y Valores (a la derecha)
+    data = []
     for key, value in datos.items():
-        text = f"{key}: {value}"
-        pdf.multi_cell(0, 10, text.encode('latin-1', 'replace').decode('latin-1'))  # Codificar y reemplazar caracteres no compatibles
+        # Solo texto plano, sin HTML
+        data.append([f"{key}", f"{value}"])
 
-    return pdf.output(dest='S').encode('latin1')
+    # Crear tabla para organizar los datos en dos columnas, sin colores
+    table = Table(data, colWidths=[150, 300])  # Ajustar los anchos de las columnas
+    table.setStyle(TableStyle([
+        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),  # Tamaño de fuente ajustado para la tabla
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Solo líneas negras, sin fondo
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Alinear en el medio verticalmente
+    ]))
+    elements.append(table)
+
+    # Generar el PDF con la marca de agua (nombre o licencia)
+    doc.build(elements, onFirstPage=add_watermark, onLaterPages=add_watermark)
+
+    # Leer y devolver el archivo PDF generado
+    with open("report.pdf", "rb") as pdf_file:
+        return pdf_file.read()
+
+
+
+
 
 # Función para generar el archivo CSV en memoria
 def generar_csv(datos):
@@ -46,6 +140,8 @@ def generar_csv(datos):
     df.to_csv(output, index=False)
     processed_data = output.getvalue()
     return processed_data
+
+
 
 # Inicializar session_state para evitar errores
 if 'jugador' not in st.session_state:
@@ -241,7 +337,7 @@ if idioma == "English":
         # Botón para descargar el PDF
         st.download_button(
             label="Download PDF",
-            data=pdf_data,
+            data=pdf_data,  # 'pdf_data' ahora es un objeto de tipo 'bytes'
             file_name="report.pdf",
             mime="application/pdf"
         )
@@ -351,8 +447,8 @@ else:
 
         # Botón para descargar el PDF
         st.download_button(
-            label="Descargar PDF",
-            data=pdf_data,
+            label="Download PDF",
+            data=pdf_data,  # 'pdf_data' ahora es un objeto de tipo 'bytes'
             file_name="report.pdf",
             mime="application/pdf"
         )
