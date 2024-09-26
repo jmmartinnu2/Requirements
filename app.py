@@ -244,7 +244,7 @@ else:
 
     # 1. Posiciones a Refuerzar
     nombre_club = st.text_input("Nombre del club", key='nombre_club')
-    with st.expander("1. Posiciones a Refuerzar"):
+    with st.expander("1. Posiciones a Reforzar"):
         
         position = st.selectbox(
             "Seleccione la posición prioritaria que desea reforzar",
