@@ -7,6 +7,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
 from reportlab.lib.styles import getSampleStyleSheet
+import matplotlib.pyplot as plt
 
 
 # Configurar tema oscuro
@@ -29,6 +30,13 @@ st.markdown(
     </style>
     """, unsafe_allow_html=True
 )
+
+# Función para mostrar y dibujar un campo de fútbol usando mplsoccer
+def mostrar_campo():
+    pitch = Pitch(pitch_color='#aabb97', line_color='white', stripe=True)
+    fig, ax = pitch.draw(figsize=(10, 10))  # Tamaño ajustado a 2.5x1.5 (más pequeño)
+    return fig
+
 
 # Función personalizada de FPDF para trabajar con UTF-8
 class PDF(FPDF):
@@ -143,6 +151,7 @@ def generar_csv(datos):
 
 
 
+
 # Inicializar session_state para evitar errores
 if 'jugador' not in st.session_state:
     st.session_state['jugador'] = ""
@@ -180,6 +189,13 @@ def guardar_datos(datos, archivo="informes_jugadores.csv"):
     df = pd.concat([df, pd.DataFrame([datos])], ignore_index=True)
     df.to_csv(archivo, index=False)
 
+
+
+# Mostrar el campo de fútbol justo antes de comenzar el formulario
+#campo_fig = mostrar_campo()
+#st.sidebar.pyplot(campo_fig)
+
+
 # Cargar la imagen de tu licencia FIFA
 st.sidebar.image("licencia.png")  # Imagen en la barra lateral
 
@@ -196,6 +212,12 @@ st.sidebar.markdown("🔗 [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-m-mar
 
 # Opciones de idioma, por defecto en inglés
 idioma = st.sidebar.radio("Select the language / Seleccione el idioma", ("English", "Español"), index=0)
+
+
+
+
+
+
 
 # Lista de las 211 federaciones de FIFA o países
 federaciones_fifa = [
@@ -309,7 +331,7 @@ if idioma == "English":
         contract_end = "Unspecified"  # If the player is a free agent, no contract end date is required
 
     # Submit Button
-    if st.button("Submit Report"):
+    if st.button("Download Report"):
         datos = {
             "Name of Club": club_name,
             "Position": position,
@@ -423,7 +445,7 @@ else:
         contract_end = "Sin especificar"  # Si es agente libre, no se requiere fecha de finalización del contrato
 
     # Botón de Enviar
-    if st.button("Enviar Informe"):
+    if st.button("Descargar Informe"):
         datos = {
             "Nombre del Club": nombre_club,
             "Posiciones": position,
