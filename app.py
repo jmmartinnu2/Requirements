@@ -129,7 +129,7 @@ if idioma == "English":
     # 1. Positions to Strengthen
     # Campo para el nombre del club
     club_name = st.text_input("Name of the Club", key='club_name')
-    with st.expander("1. Positions to Strengthen"):
+    with st.expander("1. Positions to strengthen"):
         position = st.selectbox(
             "Select the priority position you want to strengthen",
             ["Goalkeeper", "Center Back", "Left Back", "Right Back",
@@ -139,7 +139,7 @@ if idioma == "English":
         )
 
     # 2. Desired Player Profile
-    with st.expander("2. Desired Player Profile"):
+    with st.expander("2. Desired player profile"):
         col1, col2 = st.columns(2)
         with col1:
             ideal_age = st.selectbox(
@@ -166,7 +166,7 @@ if idioma == "English":
         )
 
     # 3. Budget Availability
-    with st.expander("3. Budget Availability"):
+    with st.expander("3. Budget availability"):
         salary_range = st.selectbox(
             "Expected Salary Range",
             ["Less than 50,000€", "Between 50,000€ and 100,000€", 
@@ -182,13 +182,13 @@ if idioma == "English":
         )
 
     # 4. Immediate Needs
-    with st.expander("4. Immediate Needs"):
+    with st.expander("4. Immediate needs"):
         immediate_needs = st.text_area("Are there any positions that need urgent reinforcement? (Specify position and reason)", key='immediate_needs')
 
 
 
     # 5. Field to select if the player is a free agent or not
-    with st.expander("5. Current Contract"):
+    with st.expander("5. Current contract"):
         free_agent = st.radio(
             "Is the player a free agent?", 
             ("Yes", "No"), 
@@ -244,7 +244,7 @@ else:
 
     # 1. Posiciones a Refuerzar
     nombre_club = st.text_input("Nombre del club", key='nombre_club')
-    with st.expander("1. Posiciones a Reforzar"):
+    with st.expander("1. Posiciones a reforzar"):
         
         position = st.selectbox(
             "Seleccione la posición prioritaria que desea reforzar",
@@ -255,7 +255,7 @@ else:
         )
 
     # 2. Perfil del Jugador Deseado
-    with st.expander("2. Perfil del Jugador Deseado"):
+    with st.expander("2. Perfil del Jugador deseado"):
         col1, col2 = st.columns(2)
         with col1:
             ideal_age = st.selectbox(
@@ -282,7 +282,7 @@ else:
         )
 
     # 3. Disponibilidad Presupuestaria
-    with st.expander("3. Disponibilidad Presupuestaria"):
+    with st.expander("3. Disponibilidad presupuestaria"):
         salary_range = st.selectbox(
             "Rango de salario esperado",
             ["Menos de 50,000€", "Entre 50,000€ y 100,000€", 
@@ -291,13 +291,13 @@ else:
              key='salary_range'
         )
         transfer_type = st.selectbox(
-            "Tipología de Incorporación",
+            "Tipología de cncorporación",
             ["Cesión", "Cesión con opción de compra", "Fichaje definitivo"],
             key='transfer_type'
         )
 
     # 4. Necesidades Inmediatas
-    with st.expander("4. Necesidades Inmediatas"):
+    with st.expander("4. Necesidades inmediatas"):
         immediate_needs = st.text_area("¿Existen posiciones que necesitan ser reforzadas de manera urgente? (Describa posición y motivo)", key='immediate_needs')
 
 
