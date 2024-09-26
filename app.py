@@ -4,6 +4,8 @@ import os
 from io import StringIO
 from fpdf import FPDF
 
+
+
 # Función personalizada de FPDF para trabajar con UTF-8
 class PDF(FPDF):
     def header(self):
@@ -84,8 +86,17 @@ def guardar_datos(datos, archivo="informes_jugadores.csv"):
 
 # Cargar la imagen de tu licencia FIFA
 st.sidebar.image("licencia.png")  # Imagen en la barra lateral
+
+# Añadir nombre y licencia con iconos
 st.sidebar.markdown("<h3>José María Martín Núñez</h3>", unsafe_allow_html=True)
 st.sidebar.markdown("<h4>Licencia FIFA Nº: 202406-6950</h4>", unsafe_allow_html=True)
+
+# Añadir email y teléfono con iconos
+st.sidebar.markdown("📧 **Email:** jmnagente@gmail.com")
+st.sidebar.markdown("📱 **Teléfono:** +34 645 764853")
+
+# Añadir otras redes sociales o información si lo deseas
+st.sidebar.markdown("🔗 [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-m-mart%C3%ADn-6b805728/)")
 
 # Opciones de idioma, por defecto en inglés
 idioma = st.sidebar.radio("Select the language / Seleccione el idioma", ("English", "Español"), index=0)
