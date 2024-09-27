@@ -8,7 +8,7 @@ from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
 from reportlab.lib.styles import getSampleStyleSheet
 import matplotlib.pyplot as plt
-
+from mplsoccer import Pitch
 
 # Configurar tema oscuro
 st.set_page_config(layout="wide")
@@ -102,9 +102,9 @@ def generar_pdf(datos):
     elements.append(Paragraph('<hr width="100%" color="gray" size="1">', styles["Normal"]))
 
     # Título secundario: Nombre del club recogido del formulario
-    nombre_club = datos.get("Name of Club", "Club name not available")
-    titulo_club = Paragraph(f"<b>Club:</b> {nombre_club}", styles["Title"])
-    elements.append(titulo_club)
+    #nombre_club = datos.get("Name of Club", "Club name not available")
+    #titulo_club = Paragraph(f"<b>Club:</b> {nombre_club}", styles["Title"])
+    #elements.append(titulo_club)
     elements.append(Spacer(1, 24))
 
     # Línea divisoria
