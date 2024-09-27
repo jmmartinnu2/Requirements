@@ -351,7 +351,62 @@ if idioma == "English":
     else:
         contract_end = "Unspecified"  # If the player is a free agent, no contract end date is required
 
-    # Submit Button
+
+
+    # Add new metrics to the form
+    # 6. Injury History
+    with st.expander("6. Injury History"):
+        lesion_historial = st.text_area("Describe the player's injury history (if applicable)", key='lesion_historial')
+
+    # 7. Performance Statistics
+    with st.expander("7. Performance Statistics"):
+        goles = st.number_input("Number of goals (if applicable)", min_value=0, step=1, key='goles')
+        asistencias = st.number_input("Number of assists (if applicable)", min_value=0, step=1, key='asistencias')
+        intercepciones = st.number_input("Number of interceptions (if applicable)", min_value=0, step=1, key='intercepciones')
+        porcentaje_paradas = st.number_input("Save percentage (for goalkeepers)", min_value=0.0, max_value=100.0, step=0.1, key='porcentaje_paradas')
+
+    # 8. International Adaptability
+    with st.expander("8. International Adaptability"):
+        adaptabilidad_internacional = st.radio("Has the player played in international leagues?", ("Yes", "No"), key='adaptabilidad_internacional')
+
+    # 9. Availability to Travel/Relocate
+    with st.expander("9. Availability to Travel/Relocate"):
+        disponibilidad_viajar = st.radio("Is the player available to travel/relocate?", ("Yes", "No"), key='disponibilidad_viajar')
+
+    # 10. Language Proficiency
+    with st.expander("10. Languages Spoken"):
+        idiomas = st.text_area("Languages spoken by the player", key='idiomas')
+
+    # 11. Current Market Value
+    with st.expander("11. Market Value"):
+        valor_mercado = st.text_input("Estimated current market value (if applicable)", key='valor_mercado')
+
+    # 12. Positional Flexibility
+    with st.expander("12. Positional Flexibility"):
+        flexibilidad_posicional = st.text_area("Additional positions the player can play", key='flexibilidad_posicional')
+
+    # 13. Scouting Recommendation
+    with st.expander("13. Scouting Recommendation"):
+        scouting_recomendacion = st.text_area("Scouting evaluation of the player's potential", key='scouting_recomendacion')
+
+    # 14. Participation in International Competitions
+    with st.expander("14. Participation in International Competitions"):
+        competiciones_internacionales = st.text_area("International competitions the player has participated in", key='competiciones_internacionales')
+
+    # 15. Attitude and Character
+    with st.expander("15. Attitude and Character"):
+        actitud_caracter = st.text_area("Evaluation of the player's attitude and character", key='actitud_caracter')
+
+    # 16. Media or Social Media Presence
+    with st.expander("16. Media or Social Media Presence"):
+        seguimiento_medios = st.text_area("Does the player have significant media or social media presence?", key='seguimiento_medios')
+
+
+
+
+
+
+    # Si se está usando en inglés:
     if st.button("Download Report"):
         datos = {
             "Name of Club": club_name,
@@ -365,13 +420,26 @@ if idioma == "English":
             "Immediate Needs": st.session_state['immediate_needs'] or "N/A",
             "Observed Players": st.session_state['jugadores_observados'],
             "Free Agent": free_agent,  # Guardar si es agente libre
-            "Contract End Date": contract_end  # Save the contract end date if the player is not a free agent
-
+            "Contract End Date": contract_end,  # Guardar la fecha de fin de contrato si no es agente libre
+            "Injury History": lesion_historial,
+            "Performance Statistics - Goals": goles,  # Usar 'goles' como en el formulario
+            "Performance Statistics - Assists": asistencias,  # Usar 'asistencias'
+            "Performance Statistics - Interceptions": intercepciones,  # Usar 'intercepciones'
+            "Performance Statistics - Save Percentage": porcentaje_paradas,  # Usar 'porcentaje_paradas'
+            "International Adaptability": adaptabilidad_internacional,
+            "Availability to Travel/Relocate": disponibilidad_viajar,
+            "Languages": idiomas,
+            "Market Value": valor_mercado,
+            "Positional Flexibility": flexibilidad_posicional,
+            "Scouting Recommendation": scouting_recomendacion,
+            "International Competitions": competiciones_internacionales,
+            "Attitude and Character": actitud_caracter,
+            "Media or Social Media Presence": seguimiento_medios
         }
         guardar_datos(datos)
         st.success("Report successfully submitted and saved.")
         st.session_state['jugadores_observados'] = []
-        
+            
         
 
         # Generar PDF
@@ -465,6 +533,62 @@ else:
     else:
         contract_end = "Sin especificar"  # Si es agente libre, no se requiere fecha de finalización del contrato
 
+
+
+
+    # Añadir nuevas métricas al formulario
+    # 6. Historial de lesiones
+    with st.expander("6. Historial de Lesiones"):
+        lesion_historial = st.text_area("Describa el historial de lesiones del jugador (si aplica)", key='lesion_historial')
+
+    # 7. Estadísticas de rendimiento
+    with st.expander("7. Estadísticas de rendimiento"):
+        goles = st.number_input("Número de goles (si es aplicable)", min_value=0, step=1, key='goles')
+        asistencias = st.number_input("Número de asistencias (si es aplicable)", min_value=0, step=1, key='asistencias')
+        intercepciones = st.number_input("Número de intercepciones (si es aplicable)", min_value=0, step=1, key='intercepciones')
+        porcentaje_paradas = st.number_input("Porcentaje de paradas (si es portero)", min_value=0.0, max_value=100.0, step=0.1, key='porcentaje_paradas')
+
+    # 8. Adaptabilidad Internacional
+    with st.expander("8. Adaptabilidad Internacional"):
+        adaptabilidad_internacional = st.radio("¿Ha jugado en ligas internacionales?", ("Sí", "No"), key='adaptabilidad_internacional')
+
+    # 9. Disponibilidad para Viajar/Mudarse
+    with st.expander("9. Disponibilidad para Viajar/Mudarse"):
+        disponibilidad_viajar = st.radio("¿Está disponible para viajar/mudarse?", ("Sí", "No"), key='disponibilidad_viajar')
+
+    # 10. Nivel de Idiomas
+    with st.expander("10. Idiomas que habla"):
+        idiomas = st.text_area("Idiomas que el jugador habla", key='idiomas')
+
+    # 11. Valor de Mercado Actual
+    with st.expander("11. Valor de Mercado"):
+        valor_mercado = st.text_input("Valor de mercado actual estimado (si aplica)", key='valor_mercado')
+
+    # 12. Flexibilidad Posicional
+    with st.expander("12. Flexibilidad Posicional"):
+        flexibilidad_posicional = st.text_area("Posiciones adicionales en las que puede jugar", key='flexibilidad_posicional')
+
+    # 13. Recomendación de Scouting
+    with st.expander("13. Recomendación de Scouting"):
+        scouting_recomendacion = st.text_area("Evaluación del scouting sobre el potencial del jugador", key='scouting_recomendacion')
+
+    # 14. Presencia en Competiciones Internacionales
+    with st.expander("14. Participación en Competiciones Internacionales"):
+        competiciones_internacionales = st.text_area("Competiciones internacionales en las que ha participado", key='competiciones_internacionales')
+
+    # 15. Actitud y Carácter
+    with st.expander("15. Actitud y Carácter"):
+        actitud_caracter = st.text_area("Evaluación de actitud y carácter", key='actitud_caracter')
+
+    # 16. Seguimiento Mediático o en Redes Sociales
+    with st.expander("16. Seguimiento en Medios o Redes Sociales"):
+        seguimiento_medios = st.text_area("¿Tiene el jugador una presencia relevante en redes sociales o medios?", key='seguimiento_medios')
+
+
+
+
+
+
     # Botón de Enviar
     if st.button("Descargar Informe"):
         datos = {
@@ -478,10 +602,27 @@ else:
             "Tipología de Incorporación": st.session_state['transfer_type'],
             "Necesidad Inmediata": st.session_state['immediate_needs'] or "N/A",
             "Agente Libre": agente_libre,  # Guardar si es agente libre
-            "Fecha de Fin de Contrato": contract_end  # Guardar la fecha de fin de contrato si no es agente libre
-        }
+            "Fecha de Fin de Contrato": contract_end,  # Guardar la fecha de fin de contrato si no es agente libre
+            "Historial de Lesiones": st.session_state['lesion_historial'],
+            "Estadísticas de Rendimiento - Goles": goles,
+            "Estadísticas de Rendimiento - Asistencias": asistencias,
+            "Estadísticas de Rendimiento - Intercepciones": intercepciones,
+            "Estadísticas de Rendimiento - Porcentaje de Paradas": porcentaje_paradas,
+            "Adaptabilidad Internacional": adaptabilidad_internacional,
+            "Disponibilidad para Viajar/Mudarse": disponibilidad_viajar,
+            "Idiomas": idiomas,
+            "Valor de Mercado": valor_mercado,
+            "Flexibilidad Posicional": flexibilidad_posicional,
+            "Recomendación de Scouting": scouting_recomendacion,
+            "Competiciones Internacionales": competiciones_internacionales,
+            "Actitud y Carácter": actitud_caracter,
+            "Seguimiento en Redes Sociales": seguimiento_medios
+            }
+        # Guardar los datos en el archivo CSV
         guardar_datos(datos)
-        st.success("Informe enviado correctamente y guardado.")
+
+        # Generar PDF con los datos nuevos
+        pdf_data = generar_pdf(datos)
  
 
 
