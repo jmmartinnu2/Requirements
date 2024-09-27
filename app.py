@@ -8,7 +8,7 @@ from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
 from reportlab.lib.styles import getSampleStyleSheet
 import matplotlib.pyplot as plt
-from mplsoccer import Pitch
+
 
 # Configurar tema oscuro
 st.set_page_config(layout="wide")
