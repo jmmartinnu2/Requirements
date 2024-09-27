@@ -31,11 +31,7 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-# Función para mostrar y dibujar un campo de fútbol usando mplsoccer
-def mostrar_campo():
-    pitch = Pitch(pitch_color='#aabb97', line_color='white', stripe=True)
-    fig, ax = pitch.draw(figsize=(10, 10))  # Tamaño ajustado a 2.5x1.5 (más pequeño)
-    return fig
+
 
 
 # Función personalizada de FPDF para trabajar con UTF-8
@@ -117,18 +113,43 @@ def generar_pdf(datos):
         # Solo texto plano, sin HTML
         data.append([f"{key}", f"{value}"])
 
-    # Crear tabla para organizar los datos en dos columnas, sin colores
-    table = Table(data, colWidths=[150, 300])  # Ajustar los anchos de las columnas
+
+   
+
+    # Obtener estilos de párrafo
+    styles = getSampleStyleSheet()
+    style = styles['Normal']  # Definir estilo normal para los párrafos
+
+    # Crear la tabla para organizar los datos en dos columnas, ajustando el tamaño dinámico de las celdas
+    table_data = []
+
+    # Recorrer los datos y crear párrafos para cada celda
+    for row in data:
+        new_row = []
+        for cell in row:
+            if isinstance(cell, str):  # Si el contenido es texto, convertirlo a párrafo
+                new_row.append(Paragraph(cell, style))
+            else:
+                new_row.append(cell)  # Si no es texto, dejarlo tal cual
+        table_data.append(new_row)
+
+    # Crear la tabla con las columnas ajustadas
+    table = Table(table_data, colWidths=[150, 300])  # Ajustar los anchos de las columnas según tu necesidad
+
+    # Establecer el estilo de la tabla
     table.setStyle(TableStyle([
         ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, -1), 10),  # Tamaño de fuente ajustado para la tabla
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Solo líneas negras, sin fondo
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Líneas negras para la tabla
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Alinear en el medio verticalmente
     ]))
+
+    # Agregar la tabla a los elementos
     elements.append(table)
+
 
     # Generar el PDF con la marca de agua (nombre o licencia)
     doc.build(elements, onFirstPage=add_watermark, onLaterPages=add_watermark)
