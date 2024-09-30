@@ -6,7 +6,7 @@ from fpdf import FPDF
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 # Configurar tema oscuro
 st.set_page_config(layout="wide")
@@ -29,31 +29,10 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-# Función personalizada de FPDF para trabajar con UTF-8
-class PDF(FPDF):
-    def header(self):
-        self.set_font("Arial", "B", 12)
-        self.cell(0, 10, "Player Recruitment Report", 0, 1, "C")
-
-    def chapter_title(self, title):
-        self.set_font("Arial", "B", 12)
-        self.cell(0, 10, title, 0, 1, "L")
-        self.ln(4)
-
-    def chapter_body(self, body):
-        self.set_font("Arial", "", 12)
-        self.multi_cell(0, 10, body)
-        self.ln()
-
-    def add_chapter(self, title, body):
-        self.add_page()
-        self.chapter_title(title)
-        self.chapter_body(body)
-
 # Función para agregar la marca de agua (tu nombre o licencia)
 def add_watermark(canvas, doc):
     canvas.saveState()
-    canvas.setFont('Helvetica-Bold', 20)
+    canvas.setFont('Helvetica-Bold', 20)  # Aumenta el tamaño de la fuente
     canvas.setStrokeColor(colors.lightgrey)
     canvas.setFillColor(colors.lightgrey)
     width, height = letter
@@ -62,8 +41,11 @@ def add_watermark(canvas, doc):
     watermark_text = "Jose Maria Martin Nuñez - Licence FIFA Nº 202406-6950"
 
     # Dibujar la marca de agua repetida en varias posiciones
-    for x in range(0, int(width), 150):  # Cada 150 unidades en el eje x
-        for y in range(0, int(height), 200):  # Cada 200 unidades en el eje y
+    step_x = 250  # Distancia entre cada marca de agua en el eje x
+    step_y = 150  # Distancia entre cada marca de agua en el eje y
+
+    for x in range(0, int(width), step_x):  # Cada `step_x` unidades en el eje x
+        for y in range(0, int(height), step_y):  # Cada `step_y` unidades en el eje y
             canvas.saveState()
             canvas.translate(x, y)
             canvas.rotate(45)  # Rotar la marca de agua en diagonal
@@ -72,70 +54,60 @@ def add_watermark(canvas, doc):
 
     canvas.restoreState()
 
-# Función para generar el PDF con mejor diseño visual y sin colores en la tabla
 def generar_pdf(datos):
-    # Crear el documento PDF
     doc = SimpleDocTemplate("report.pdf", pagesize=letter)
     elements = []
     styles = getSampleStyleSheet()
 
-    # Espaciado general
-    general_spacer = Spacer(1, 12)
+    # Estilos personalizados
+    custom_style = ParagraphStyle(
+        name='CustomStyle',
+        fontSize=12,
+        textColor=colors.darkblue,
+        spaceAfter=10,
+        spaceBefore=10,
+        alignment=1  # Centered
+    )
 
-    # Título principal: Nombre de Agente FIFA
-    titulo_fifa = Paragraph("Report for FIFA Agent:<br/><b>José Mª Martín Núñez - License: 202406-6950</b>", styles["Title"])
-    elements.append(titulo_fifa)
+    # Título principal
+    if idioma == 'English':
+        title = Paragraph("Report on club requirements", styles['Title'])
+        elements.append(title)
+    else:
+        title = Paragraph("Informe sobre requerimientos de futbolistas", styles['Title'])
+        elements.append(title)
+
+    # Añadir un espaciador
     elements.append(Spacer(1, 12))
 
-    # Línea divisoria
-    elements.append(Spacer(1, 6))
-    elements.append(Paragraph('<hr width="100%" color="gray" size="1">', styles["Normal"]))
-
-    # Estructura en dos columnas: Claves (a la izquierda) y Valores (a la derecha)
+    # Tabla de datos
     data = []
     for key, value in datos.items():
-        data.append([f"{key}", f"{value}"])
-
-    # Obtener estilos de párrafo
-    styles = getSampleStyleSheet()
-    style = styles['Normal']  # Definir estilo normal para los párrafos
-
-    # Crear la tabla para organizar los datos en dos columnas, ajustando el tamaño dinámico de las celdas
-    table_data = []
-
-    # Recorrer los datos y crear párrafos para cada celda
-    for row in data:
-        new_row = []
-        for cell in row:
-            if isinstance(cell, str):  # Si el contenido es texto, convertirlo a párrafo
-                new_row.append(Paragraph(cell, style))
-            else:
-                new_row.append(cell)  # Si no es texto, dejarlo tal cual
-        table_data.append(new_row)
+        data.append([Paragraph(f"<b>{key}</b>", styles['Normal']), Paragraph(str(value), styles['Normal'])])
 
     # Crear la tabla con las columnas ajustadas
-    table = Table(table_data, colWidths=[150, 300])  # Ajustar los anchos de las columnas según tu necesidad
-
-    # Establecer el estilo de la tabla
+    table = Table(data, colWidths=[150, 300])
     table.setStyle(TableStyle([
-        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 10),  # Tamaño de fuente ajustado para la tabla
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Líneas negras para la tabla
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Alinear en el medio verticalmente
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
     ]))
 
-    # Agregar la tabla a los elementos
     elements.append(table)
 
-    # Generar el PDF con la marca de agua (nombre o licencia)
-    doc.build(elements, onFirstPage=add_watermark, onLaterPages=add_watermark)
+    # Pie de página (opcional)
+    footer = Paragraph("José María Martín Núñez - FIFA FOOTBALL AGENT - Licence number: 202406-6950", custom_style)
+    elements.append(footer)
 
-    # Leer y devolver el archivo PDF generado
+    # Generar el PDF con la marca de agua
+    doc.build(elements, onFirstPage=add_watermark, onLaterPages=add_watermark)
     with open("report.pdf", "rb") as pdf_file:
         return pdf_file.read()
+
+# Resto de tu código para Streamlit aquí...
 
 # Inicializar session_state para evitar errores
 if 'jugador' not in st.session_state:
@@ -256,7 +228,7 @@ if idioma == "English":
                 key='ideal_age'
             )
         with col2:
-            competitive_experience = st.selectbox(
+            competitive_experience = st.multiselect(
                 "Competitive Experience",
                 ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Other Categories"],
                 key='competitive_experience'
@@ -472,9 +444,9 @@ else:
                 key='ideal_age'
             )
         with col2:
-            competitive_experience = st.selectbox(
+            competitive_experience = st.multiselect(
                 "Experiencia Competitiva",
-                ["Categoria 1", "Categoria 2", "Categoria 3", "Categoria 4", "Categoria 5", "Otras Categorias"],
+                ["Categoria 1", "Categoria 2", "Categoria 3", "Categoria 4", "Categoria 5", "Otras Categorías"],
                 key='competitive_experience'
             )
         preferred_nationality = st.multiselect("Nacionalidad Preferente (Opcional)", federaciones_fifa, key='preferred_nationality')
