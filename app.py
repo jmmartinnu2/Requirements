@@ -149,7 +149,7 @@ if 'position' not in st.session_state:
 if 'ideal_age' not in st.session_state:
     st.session_state['ideal_age'] = "Under-23"
 if 'competitive_experience' not in st.session_state:
-    st.session_state['competitive_experience'] = "Experience in 1st Division"
+    st.session_state['competitive_experience'] = "Category 1"
 if 'preferred_nationality' not in st.session_state:
     st.session_state['preferred_nationality'] = "Afghanistan"
 if 'style_of_play' not in st.session_state:
@@ -258,7 +258,7 @@ if idioma == "English":
         with col2:
             competitive_experience = st.selectbox(
                 "Competitive Experience",
-                ["Experience in 1st Division", "Experience in 2nd Division", "Young talent to develop"],
+                ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Other Categories"],
                 key='competitive_experience'
             )
         preferred_nationality = st.multiselect("Preferred Nationality (Optional)", federaciones_fifa, key='preferred_nationality')
@@ -474,7 +474,7 @@ else:
         with col2:
             competitive_experience = st.selectbox(
                 "Experiencia Competitiva",
-                ["Experiencia en 1ª División", "Experiencia en 2ª División", "Potencial joven a desarrollar"],
+                ["Categoria 1", "Categoria 2", "Categoria 3", "Categoria 4", "Categoria 5", "Otras Categorias"],
                 key='competitive_experience'
             )
         preferred_nationality = st.multiselect("Nacionalidad Preferente (Opcional)", federaciones_fifa, key='preferred_nationality')
