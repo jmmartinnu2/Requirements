@@ -1,13 +1,34 @@
 import streamlit as st
 import pandas as pd
 import os
-from io import StringIO
 from fpdf import FPDF
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
+
+
+# Configurar tema oscuro
+st.set_page_config(layout="wide")
+st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: #1f1f1f;
+        color: white;
+    }
+    .sidebar .sidebar-content {
+        background: #333333;
+        color: white;
+    }
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True
+)
 
 
 # Función para agregar la marca de agua (tu nombre o licencia)
