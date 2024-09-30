@@ -39,9 +39,9 @@ st.markdown(
 # Función para mostrar la pantalla de inicio de sesión en la barra lateral
 def mostrar_login():
     with st.sidebar:
-        st.title("Login/Inicio de Sesión")
-        contraseña = st.text_input("Password/Introduce la contraseña", type="password")
-        if st.button("Login/Iniciar sesión"):
+        st.title("Login / Inicio de Sesión")
+        contraseña = st.text_input("Password / Introduce la contraseña", type="password")
+        if st.button("Login / Iniciar sesión"):
             if contraseña == CONTRASEÑA_CORRECTA:
                 st.session_state['sesion_iniciada'] = True
             else:
