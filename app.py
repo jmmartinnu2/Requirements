@@ -256,7 +256,7 @@ if idioma == "English":
                 key='ideal_age'
             )
         with col2:
-            competitive_experience = st.selectbox(
+            competitive_experience = st.multiselect(
                 "Competitive Experience",
                 ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Other Categories"],
                 key='competitive_experience'
@@ -472,7 +472,7 @@ else:
                 key='ideal_age'
             )
         with col2:
-            competitive_experience = st.selectbox(
+            competitive_experience = st.multiselect(
                 "Experiencia Competitiva",
                 ["Categoria 1", "Categoria 2", "Categoria 3", "Categoria 4", "Categoria 5", "Otras Categorias"],
                 key='competitive_experience'
