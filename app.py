@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import os
-from io import StringIO
-from fpdf import FPDF
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
