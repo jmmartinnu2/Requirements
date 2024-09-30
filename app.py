@@ -8,6 +8,13 @@ from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
+# Contraseña correcta definida
+CONTRASEÑA_CORRECTA = "240683"
+
+# Variable para mantener el estado de la sesión
+if 'sesion_iniciada' not in st.session_state:
+    st.session_state['sesion_iniciada'] = False
+
 # Configurar tema oscuro
 st.set_page_config(layout="wide")
 st.markdown(
@@ -28,6 +35,22 @@ st.markdown(
     </style>
     """, unsafe_allow_html=True
 )
+
+# Función para mostrar la pantalla de inicio de sesión en la barra lateral
+def mostrar_login():
+    with st.sidebar:
+        st.title("Inicio de Sesión")
+        contraseña = st.text_input("Introduce la contraseña", type="password")
+        if st.button("Iniciar sesión"):
+            if contraseña == CONTRASEÑA_CORRECTA:
+                st.session_state['sesion_iniciada'] = True
+            else:
+                st.error("Contraseña incorrecta. Acceso denegado.")
+
+# Llamar a la función de inicio de sesión si no se ha iniciado
+if not st.session_state['sesion_iniciada']:
+    mostrar_login()
+    st.stop()  # Detiene la ejecución del script si no se ha iniciado sesión
 
 # Función para agregar la marca de agua (tu nombre o licencia)
 def add_watermark(canvas, doc):
