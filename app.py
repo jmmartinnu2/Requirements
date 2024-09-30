@@ -40,9 +40,9 @@ if 'sesion_iniciada' not in st.session_state:
 
 # Función para mostrar la pantalla de inicio de sesión
 def mostrar_login():
-    st.title("Inicio de Sesión")
-    contraseña = st.text_input("Introduce la contraseña", type="password")
-    if st.button("Iniciar sesión"):
+    st.title("Login / Inicio de Sesión")
+    contraseña = st.text_input("Password / Introduce la contraseña", type="password")
+    if st.button("Login / Iniciar sesión"):
         if contraseña == CONTRASEÑA_CORRECTA:
             st.session_state['sesion_iniciada'] = True
             st.success("¡Inicio de sesión exitoso!")
