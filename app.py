@@ -5,10 +5,8 @@ from io import StringIO
 from fpdf import FPDF
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
-import matplotlib.pyplot as plt
-
 
 # Configurar tema oscuro
 st.set_page_config(layout="wide")
@@ -31,9 +29,6 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-
-
-
 # Función personalizada de FPDF para trabajar con UTF-8
 class PDF(FPDF):
     def header(self):
@@ -55,7 +50,6 @@ class PDF(FPDF):
         self.chapter_title(title)
         self.chapter_body(body)
 
-
 # Función para agregar la marca de agua (tu nombre o licencia)
 def add_watermark(canvas, doc):
     canvas.saveState()
@@ -68,8 +62,8 @@ def add_watermark(canvas, doc):
     watermark_text = "Jose Maria Martin Nuñez - Licence FIFA Nº 202406-6950"
 
     # Dibujar la marca de agua repetida en varias posiciones
-    for x in range(0, int(width), 150):  # Cada 200 unidades en el eje x
-        for y in range(0, int(height),200):  # Cada 150 unidades en el eje y
+    for x in range(0, int(width), 150):  # Cada 150 unidades en el eje x
+        for y in range(0, int(height), 200):  # Cada 200 unidades en el eje y
             canvas.saveState()
             canvas.translate(x, y)
             canvas.rotate(45)  # Rotar la marca de agua en diagonal
@@ -89,7 +83,7 @@ def generar_pdf(datos):
     general_spacer = Spacer(1, 12)
 
     # Título principal: Nombre de Agente FIFA
-    titulo_fifa = Paragraph("Report for FIFA Agent:<br/><b>José Mª Martín Núñez - LIcence: 202406-6950</b>", styles["Title"])
+    titulo_fifa = Paragraph("Report for FIFA Agent:<br/><b>José Mª Martín Núñez - License: 202406-6950</b>", styles["Title"])
     elements.append(titulo_fifa)
     elements.append(Spacer(1, 12))
 
@@ -97,24 +91,10 @@ def generar_pdf(datos):
     elements.append(Spacer(1, 6))
     elements.append(Paragraph('<hr width="100%" color="gray" size="1">', styles["Normal"]))
 
-    # Título secundario: Nombre del club recogido del formulario
-    #nombre_club = datos.get("Name of Club", "Club name not available")
-    #titulo_club = Paragraph(f"<b>Club:</b> {nombre_club}", styles["Title"])
-    #elements.append(titulo_club)
-    elements.append(Spacer(1, 24))
-
-    # Línea divisoria
-    elements.append(Paragraph('<hr width="100%" color="gray" size="1">', styles["Normal"]))
-    elements.append(general_spacer)
-
     # Estructura en dos columnas: Claves (a la izquierda) y Valores (a la derecha)
     data = []
     for key, value in datos.items():
-        # Solo texto plano, sin HTML
         data.append([f"{key}", f"{value}"])
-
-
-   
 
     # Obtener estilos de párrafo
     styles = getSampleStyleSheet()
@@ -150,28 +130,12 @@ def generar_pdf(datos):
     # Agregar la tabla a los elementos
     elements.append(table)
 
-
     # Generar el PDF con la marca de agua (nombre o licencia)
     doc.build(elements, onFirstPage=add_watermark, onLaterPages=add_watermark)
 
     # Leer y devolver el archivo PDF generado
     with open("report.pdf", "rb") as pdf_file:
         return pdf_file.read()
-
-
-
-
-
-# Función para generar el archivo CSV en memoria
-def generar_csv(datos):
-    df = pd.DataFrame([datos])
-    output = StringIO()
-    df.to_csv(output, index=False)
-    processed_data = output.getvalue()
-    return processed_data
-
-
-
 
 # Inicializar session_state para evitar errores
 if 'jugador' not in st.session_state:
@@ -210,13 +174,6 @@ def guardar_datos(datos, archivo="informes_jugadores.csv"):
     df = pd.concat([df, pd.DataFrame([datos])], ignore_index=True)
     df.to_csv(archivo, index=False)
 
-
-
-# Mostrar el campo de fútbol justo antes de comenzar el formulario
-#campo_fig = mostrar_campo()
-#st.sidebar.pyplot(campo_fig)
-
-
 # Cargar la imagen de tu licencia FIFA
 st.sidebar.image("licencia.png")  # Imagen en la barra lateral
 
@@ -233,12 +190,6 @@ st.sidebar.markdown("🔗 [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-m-mar
 
 # Opciones de idioma, por defecto en inglés
 idioma = st.sidebar.radio("Select the language / Seleccione el idioma", ("English", "Español"), index=0)
-
-
-
-
-
-
 
 # Lista de las 211 federaciones de FIFA o países
 federaciones_fifa = [
@@ -277,8 +228,15 @@ if idioma == "English":
     st.subheader("Player Recruitment Needs")
 
     # 1. Positions to Strengthen
-    # Campo para el nombre del club
     club_name = st.text_input("Name of the Club", key='club_name')
+    
+    # Campo de selección para Ventana de Mercado
+    ventana_mercado = st.selectbox(
+        "Market Window to reinforce",
+        ["Summer Transfer Window", "Winter Transfer Window", "General"],
+        key='ventana_mercado'
+    )
+
     with st.expander("1. Positions to strengthen"):
         position = st.selectbox(
             "Select the priority position you want to strengthen",
@@ -335,8 +293,6 @@ if idioma == "English":
     with st.expander("4. Immediate needs"):
         immediate_needs = st.text_area("Are there any positions that need urgent reinforcement? (Specify position and reason)", key='immediate_needs')
 
-
-
     # 5. Field to select if the player is a free agent or not
     with st.expander("5. Current contract"):
         free_agent = st.radio(
@@ -347,11 +303,9 @@ if idioma == "English":
 
     # If the player is not a free agent, show field for contract end date
     if free_agent == "No":
-        contract_end =  st.text_input("Enter the amount the club can afford to pay for the player", key='contract_end')
+        contract_end = st.text_input("Enter the amount the club can afford to pay for the player", key='contract_end')
     else:
         contract_end = "Unspecified"  # If the player is a free agent, no contract end date is required
-
-
 
     # Add new metrics to the form
     # 6. Injury History
@@ -360,10 +314,44 @@ if idioma == "English":
 
     # 7. Performance Statistics
     with st.expander("7. Performance Statistics"):
-        goles = st.number_input("Number of goals (if applicable)", min_value=0, step=1, key='goles')
-        asistencias = st.number_input("Number of assists (if applicable)", min_value=0, step=1, key='asistencias')
-        intercepciones = st.number_input("Number of interceptions (if applicable)", min_value=0, step=1, key='intercepciones')
-        porcentaje_paradas = st.number_input("Save percentage (for goalkeepers)", min_value=0.0, max_value=100.0, step=0.1, key='porcentaje_paradas')
+        periodo = st.selectbox("Time Period", ["Last 10 Matches", "Last Season", "Total"])
+        
+        # Goles
+        goles_totales = st.number_input("Total Goals", min_value=0, step=1, key='goles_totales')
+        if goles_totales > 0:
+            goles_por_partido = goles_totales / (10 if periodo == "Last 10 Matches" else 38)  # 38 es una suposición para una temporada completa
+            st.write(f"Goals per match: {goles_por_partido:.2f}")
+        else:
+            goles_por_partido = 0  # Definir como 0 si no hay goles totales
+
+        # Asistencias
+        asistencias_totales = st.number_input("Total Assists", min_value=0, step=1, key='asistencias_totales')
+        if asistencias_totales > 0:
+            asistencias_por_partido = asistencias_totales / (10 if periodo == "Last 10 Matches" else 38)
+            st.write(f"Assists per match: {asistencias_por_partido:.2f}")
+        else:
+            asistencias_por_partido = 0  # Definir como 0 si no hay asistencias totales
+
+        # Intercepciones
+        intercepciones_totales = st.number_input("Total Interceptions", min_value=0, step=1, key='intercepciones_totales')
+        if intercepciones_totales > 0:
+            intercepciones_por_partido = intercepciones_totales / (10 if periodo == "Last 10 Matches" else 38)
+            st.write(f"Interceptions per match: {intercepciones_por_partido:.2f}")
+        else:
+            intercepciones_por_partido = 0  # Definir como 0 si no hay intercepciones totales
+
+        # Porcentaje de paradas (si es portero)
+        is_goalkeeper = st.radio("Is the player a goalkeeper?", ("Yes", "No"), key='is_goalkeeper')
+        if is_goalkeeper == "Yes":
+            paradas_totales = st.number_input("Total Saves", min_value=0, step=1, key='paradas_totales')
+            total_disparos = st.number_input("Total Shots Faced", min_value=1, step=1, key='total_disparos')
+            if paradas_totales > 0:
+                porcentaje_paradas = (paradas_totales / total_disparos) * 100
+                st.write(f"Save Percentage: {porcentaje_paradas:.2f}%")
+            else:
+                porcentaje_paradas = 0  # Definir como 0 si no hay paradas totales
+        else:
+            porcentaje_paradas = "N/A"  # Si no es portero, el porcentaje de paradas no aplica
 
     # 8. International Adaptability
     with st.expander("8. International Adaptability"):
@@ -401,15 +389,11 @@ if idioma == "English":
     with st.expander("16. Media or Social Media Presence"):
         seguimiento_medios = st.text_area("Does the player have significant media or social media presence?", key='seguimiento_medios')
 
-
-
-
-
-
     # Si se está usando en inglés:
     if st.button("Download Report"):
         datos = {
             "Name of Club": club_name,
+            "Market Window to Reinforce": ventana_mercado,
             "Position": position,
             "Ideal Age": ideal_age,
             "Competitive Experience": competitive_experience,
@@ -419,13 +403,16 @@ if idioma == "English":
             "Transfer Type": st.session_state['transfer_type'],
             "Immediate Needs": st.session_state['immediate_needs'] or "N/A",
             "Observed Players": st.session_state['jugadores_observados'],
-            "Free Agent": free_agent,  # Guardar si es agente libre
-            "Contract End Date": contract_end,  # Guardar la fecha de fin de contrato si no es agente libre
+            "Free Agent": free_agent,
+            "Contract End Date": contract_end,
             "Injury History": lesion_historial,
-            "Performance Statistics - Goals": goles,  # Usar 'goles' como en el formulario
-            "Performance Statistics - Assists": asistencias,  # Usar 'asistencias'
-            "Performance Statistics - Interceptions": intercepciones,  # Usar 'intercepciones'
-            "Performance Statistics - Save Percentage": porcentaje_paradas,  # Usar 'porcentaje_paradas'
+            "Performance Statistics - Goals": goles_totales,
+            "Performance Statistics - Goals per Match": goles_por_partido,
+            "Performance Statistics - Assists": asistencias_totales,
+            "Performance Statistics - Assists per Match": asistencias_por_partido,
+            "Performance Statistics - Interceptions": intercepciones_totales,
+            "Performance Statistics - Interceptions per Match": intercepciones_por_partido,
+            "Performance Statistics - Save Percentage": porcentaje_paradas,
             "International Adaptability": adaptabilidad_internacional,
             "Availability to Travel/Relocate": disponibilidad_viajar,
             "Languages": idiomas,
@@ -440,21 +427,16 @@ if idioma == "English":
         st.success("Report successfully submitted and saved.")
         st.session_state['jugadores_observados'] = []
             
-        
-
         # Generar PDF
         pdf_data = generar_pdf(datos)
 
         # Botón para descargar el PDF
         st.download_button(
             label="Download PDF",
-            data=pdf_data,  # 'pdf_data' ahora es un objeto de tipo 'bytes'
+            data=pdf_data,
             file_name="report.pdf",
             mime="application/pdf"
         )
-
-
-        
 
 # Formulario en español
 else:
@@ -462,6 +444,14 @@ else:
 
     # 1. Posiciones a Refuerzar
     nombre_club = st.text_input("Nombre del club", key='nombre_club')
+
+    # Campo de selección para Ventana de Mercado
+    ventana_mercado = st.selectbox(
+        "Ventana a reforzar",
+        ["Ventana de Transferencia Verano", "Ventana de Transferencia Invierno", "General"],
+        key='ventana_mercado'
+    )
+
     with st.expander("1. Posiciones a reforzar"):
         
         position = st.selectbox(
@@ -509,7 +499,7 @@ else:
              key='salary_range'
         )
         transfer_type = st.selectbox(
-            "Tipología de cncorporación",
+            "Tipología de incorporación",
             ["Cesión", "Cesión con opción de compra", "Fichaje definitivo"],
             key='transfer_type'
         )
@@ -518,8 +508,7 @@ else:
     with st.expander("4. Necesidades inmediatas"):
         immediate_needs = st.text_area("¿Existen posiciones que necesitan ser reforzadas de manera urgente? (Describa posición y motivo)", key='immediate_needs')
 
-
-    #   5. Campo para seleccionar si el jugador es Agente Libre o no
+    # 5. Campo para seleccionar si el jugador es Agente Libre o no
     with st.expander("5. Contrato actual"):
         agente_libre = st.radio(
             "¿Quieren el jugador Agente Libre?", 
@@ -529,24 +518,55 @@ else:
 
     # Si no es agente libre, mostrar campo para la fecha de finalización de contrato
     if agente_libre == "No":
-        contract_end =  st.text_input("Ingrese lo que puede llegar a pagar el club por el jugador/a", key='contract_end')
+        contract_end = st.text_input("Ingrese lo que puede llegar a pagar el club por el jugador/a", key='contract_end')
     else:
         contract_end = "Sin especificar"  # Si es agente libre, no se requiere fecha de finalización del contrato
-
-
-
 
     # Añadir nuevas métricas al formulario
     # 6. Historial de lesiones
     with st.expander("6. Historial de Lesiones"):
         lesion_historial = st.text_area("Describa el historial de lesiones del jugador (si aplica)", key='lesion_historial')
 
-    # 7. Estadísticas de rendimiento
-    with st.expander("7. Estadísticas de rendimiento"):
-        goles = st.number_input("Número de goles (si es aplicable)", min_value=0, step=1, key='goles')
-        asistencias = st.number_input("Número de asistencias (si es aplicable)", min_value=0, step=1, key='asistencias')
-        intercepciones = st.number_input("Número de intercepciones (si es aplicable)", min_value=0, step=1, key='intercepciones')
-        porcentaje_paradas = st.number_input("Porcentaje de paradas (si es portero)", min_value=0.0, max_value=100.0, step=0.1, key='porcentaje_paradas')
+    # 7. Estadísticas de Rendimiento
+    with st.expander("7. Estadísticas de Rendimiento"):
+        periodo = st.selectbox("Periodo de Tiempo", ["Últimos 10 partidos", "Última temporada", "Total"])
+        
+        # Goles
+        goles_totales = st.number_input("Total de goles", min_value=0, step=1, key='goles_totales')
+        if goles_totales > 0:
+            goles_por_partido = goles_totales / (10 if periodo == "Últimos 10 partidos" else 38)
+            st.write(f"Goles por partido: {goles_por_partido:.2f}")
+        else:
+            goles_por_partido = 0  # Definir como 0 si no hay goles totales
+
+        # Asistencias
+        asistencias_totales = st.number_input("Total de asistencias", min_value=0, step=1, key='asistencias_totales')
+        if asistencias_totales > 0:
+            asistencias_por_partido = asistencias_totales / (10 if periodo == "Últimos 10 partidos" else 38)
+            st.write(f"Asistencias por partido: {asistencias_por_partido:.2f}")
+        else:
+            asistencias_por_partido = 0  # Definir como 0 si no hay asistencias totales
+
+        # Intercepciones
+        intercepciones_totales = st.number_input("Total de intercepciones", min_value=0, step=1, key='intercepciones_totales')
+        if intercepciones_totales > 0:
+            intercepciones_por_partido = intercepciones_totales / (10 if periodo == "Últimos 10 partidos" else 38)
+            st.write(f"Intercepciones por partido: {intercepciones_por_partido:.2f}")
+        else:
+            intercepciones_por_partido = 0  # Definir como 0 si no hay intercepciones totales
+
+        # Porcentaje de paradas (si es portero)
+        is_goalkeeper = st.radio("¿El jugador es portero?", ("Sí", "No"), key='is_goalkeeper')
+        if is_goalkeeper == "Sí":
+            paradas_totales = st.number_input("Total de paradas", min_value=0, step=1, key='paradas_totales')
+            total_disparos = st.number_input("Total de disparos enfrentados", min_value=1, step=1, key='total_disparos')
+            if paradas_totales > 0:
+                porcentaje_paradas = (paradas_totales / total_disparos) * 100
+                st.write(f"Porcentaje de paradas: {porcentaje_paradas:.2f}%")
+            else:
+                porcentaje_paradas = 0  # Definir como 0 si no hay paradas totales
+        else:
+            porcentaje_paradas = "N/A"  # Si no es portero, el porcentaje de paradas no aplica
 
     # 8. Adaptabilidad Internacional
     with st.expander("8. Adaptabilidad Internacional"):
@@ -584,15 +604,11 @@ else:
     with st.expander("16. Seguimiento en Medios o Redes Sociales"):
         seguimiento_medios = st.text_area("¿Tiene el jugador una presencia relevante en redes sociales o medios?", key='seguimiento_medios')
 
-
-
-
-
-
     # Botón de Enviar
     if st.button("Descargar Informe"):
         datos = {
             "Nombre del Club": nombre_club,
+            "Ventana a Reforzar": ventana_mercado,
             "Posiciones": position,
             "Edad Ideal": ideal_age,
             "Experiencia Competitiva": competitive_experience,
@@ -601,12 +617,15 @@ else:
             "Rango Salarial": st.session_state['salary_range'],
             "Tipología de Incorporación": st.session_state['transfer_type'],
             "Necesidad Inmediata": st.session_state['immediate_needs'] or "N/A",
-            "Agente Libre": agente_libre,  # Guardar si es agente libre
-            "Fecha de Fin de Contrato": contract_end,  # Guardar la fecha de fin de contrato si no es agente libre
-            "Historial de Lesiones": st.session_state['lesion_historial'],
-            "Estadísticas de Rendimiento - Goles": goles,
-            "Estadísticas de Rendimiento - Asistencias": asistencias,
-            "Estadísticas de Rendimiento - Intercepciones": intercepciones,
+            "Agente Libre": agente_libre,
+            "Fecha de Fin de Contrato": contract_end,
+            "Historial de Lesiones": lesion_historial,
+            "Estadísticas de Rendimiento - Goles": goles_totales,
+            "Estadísticas de Rendimiento - Goles por Partido": goles_por_partido,
+            "Estadísticas de Rendimiento - Asistencias": asistencias_totales,
+            "Estadísticas de Rendimiento - Asistencias por Partido": asistencias_por_partido,
+            "Estadísticas de Rendimiento - Intercepciones": intercepciones_totales,
+            "Estadísticas de Rendimiento - Intercepciones por Partido": intercepciones_por_partido,
             "Estadísticas de Rendimiento - Porcentaje de Paradas": porcentaje_paradas,
             "Adaptabilidad Internacional": adaptabilidad_internacional,
             "Disponibilidad para Viajar/Mudarse": disponibilidad_viajar,
@@ -617,22 +636,17 @@ else:
             "Competiciones Internacionales": competiciones_internacionales,
             "Actitud y Carácter": actitud_caracter,
             "Seguimiento en Redes Sociales": seguimiento_medios
-            }
+        }
         # Guardar los datos en el archivo CSV
         guardar_datos(datos)
 
         # Generar PDF con los datos nuevos
         pdf_data = generar_pdf(datos)
- 
-
-
-        # Generar PDF
-        pdf_data = generar_pdf(datos)
 
         # Botón para descargar el PDF
         st.download_button(
             label="Download PDF",
-            data=pdf_data,  # 'pdf_data' ahora es un objeto de tipo 'bytes'
+            data=pdf_data,
             file_name="report.pdf",
             mime="application/pdf"
         )
