@@ -185,15 +185,12 @@ def main():
     # Mostrar login si no se ha iniciado sesión
     if not st.session_state['sesion_iniciada']:
         mostrar_login(CONTRASENA_CORRECTA)
-        if st.session_state['sesion_iniciada']:
-            pass
-        else:
-            # Mostrar el campo de fútbol centrado y más pequeño
-            col1, col2, col3 = st.columns([1, 2, 1])
-            with col2:
-                fig = mostrar_campo()
-                st.pyplot(fig)
-            st.stop()
+        # Mostrar el campo de fútbol centrado y más pequeño
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            fig = mostrar_campo()
+            st.pyplot(fig)
+        st.stop()  # Detener la ejecución hasta que se inicie sesión
 
     # Cargar la imagen de tu licencia FIFA
     st.sidebar.image("licencia.png")  # Imagen en la barra lateral
