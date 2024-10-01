@@ -2,4 +2,7 @@ streamlit
 pandas
 fpdf
 reportlab
+<<<<<<< HEAD
 mplsoccer
+=======
+>>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
