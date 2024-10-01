@@ -50,10 +50,7 @@ def mostrar_campo():
     return fig
 
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 3eebc882df2cef1786762a679bd617764a03851a
 
 
 def mostrar_login(CONTRASENA_CORRECTA):
