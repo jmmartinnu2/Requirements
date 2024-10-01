@@ -2,7 +2,7 @@
 import streamlit as st
 import pandas as pd
 import os
-<<<<<<< HEAD
+
 from mplsoccer import Pitch
 import matplotlib.pyplot as plt
 from fpdf import FPDF
@@ -11,7 +11,7 @@ from reportlab.lib import colors
 from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer,
                                 Table, TableStyle)
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-=======
+
 from fpdf import FPDF
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -20,12 +20,11 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 
 
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
 
 # Configurar el estilo de la página debe ser la primera llamada a Streamlit
 st.set_page_config(layout="wide")
 
-<<<<<<< HEAD
 def configurar_estilo():
     # Estilos CSS personalizados
     st.markdown(
@@ -62,7 +61,7 @@ def mostrar_campo():
     return fig
 
 
-=======
+
 # Contraseña correcta definida
 CONTRASEÑA_CORRECTA = "240683"
 
@@ -88,7 +87,7 @@ if not st.session_state['sesion_iniciada']:
 
 # Aquí comienza el contenido de la aplicación después del inicio de sesión
 st.write("Contenido de la aplicación.")
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
 
 
 
@@ -120,13 +119,13 @@ def add_watermark(canvas, doc):
     step_x = 250  # Distancia entre cada marca de agua en el eje x
     step_y = 150  # Distancia entre cada marca de agua en el eje y
 
-<<<<<<< HEAD
+
     for x in range(0, int(width), step_x):
         for y in range(0, int(height), step_y):
-=======
+
     for x in range(0, int(width), step_x):  # Cada `step_x` unidades en el eje x
         for y in range(0, int(height), step_y):  # Cada `step_y` unidades en el eje y
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
             canvas.saveState()
             canvas.translate(x, y)
             canvas.rotate(45)  # Rotar la marca de agua en diagonal
@@ -135,12 +134,12 @@ def add_watermark(canvas, doc):
 
     canvas.restoreState()
 
-<<<<<<< HEAD
+
 def generar_pdf(datos, idioma):
     # Función para generar el PDF con los datos
-=======
+
 def generar_pdf(datos):
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
     doc = SimpleDocTemplate("report.pdf", pagesize=letter)
     elements = []
     styles = getSampleStyleSheet()
@@ -152,26 +151,26 @@ def generar_pdf(datos):
         textColor=colors.darkblue,
         spaceAfter=10,
         spaceBefore=10,
-<<<<<<< HEAD
+
         alignment=1  # Centrado
-=======
+
         alignment=1  # Centered
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
     )
 
     # Título principal
     if idioma == 'English':
         title = Paragraph("Report on club requirements", styles['Title'])
-<<<<<<< HEAD
+
     else:
         title = Paragraph("Informe sobre requerimientos de futbolistas", styles['Title'])
     elements.append(title)
-=======
+
         elements.append(title)
     else:
         title = Paragraph("Informe sobre requerimientos de futbolistas", styles['Title'])
         elements.append(title)
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
 
     # Añadir un espaciador
     elements.append(Spacer(1, 12))
@@ -179,14 +178,14 @@ def generar_pdf(datos):
     # Tabla de datos
     data = []
     for key, value in datos.items():
-<<<<<<< HEAD
+
         data.append([
             Paragraph(f"<b>{key}</b>", styles['Normal']),
             Paragraph(str(value), styles['Normal'])
         ])
-=======
+
         data.append([Paragraph(f"<b>{key}</b>", styles['Normal']), Paragraph(str(value), styles['Normal'])])
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
 
     # Crear la tabla con las columnas ajustadas
     table = Table(data, colWidths=[150, 300])
@@ -202,14 +201,14 @@ def generar_pdf(datos):
     elements.append(table)
 
     # Pie de página (opcional)
-<<<<<<< HEAD
+
     footer = Paragraph(
         "José María Martín Núñez - FIFA FOOTBALL AGENT - Licence number: 202406-6950",
         custom_style
     )
-=======
+
     footer = Paragraph("José María Martín Núñez - FIFA FOOTBALL AGENT - Licence number: 202406-6950", custom_style)
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
     elements.append(footer)
 
     # Generar el PDF con la marca de agua
@@ -217,8 +216,7 @@ def generar_pdf(datos):
     with open("report.pdf", "rb") as pdf_file:
         return pdf_file.read()
 
-<<<<<<< HEAD
-=======
+
 # Resto de tu código para Streamlit aquí...
 
 # Inicializar session_state para evitar errores
@@ -248,7 +246,7 @@ if 'jugadores_observados' not in st.session_state:
     st.session_state['jugadores_observados'] = []
 
 # Función para guardar los datos en un archivo CSV
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
 def guardar_datos(datos, archivo="informes_jugadores.csv"):
     # Función para guardar los datos en un archivo CSV
     if not os.path.exists(archivo):
@@ -378,7 +376,7 @@ def main():
                  "Right Winger", "Striker"],
                  key='position'
             )
-<<<<<<< HEAD
+
 
         # 2. Desired Player Profile
         with st.expander("2. Desired player profile"):
@@ -400,13 +398,13 @@ def main():
                 "Preferred Nationality (Optional)",
                 federaciones_fifa,
                 key='preferred_nationality'
-=======
+
         with col2:
             competitive_experience = st.multiselect(
                 "Competitive Experience",
                 ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Other Categories"],
                 key='competitive_experience'
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
             )
 
             # Style of Play
@@ -464,8 +462,8 @@ def main():
                 "Describe the player's injury history (if applicable)",
                 key='lesion_historial'
             )
-<<<<<<< HEAD
-=======
+
+
         with col2:
             competitive_experience = st.multiselect(
                 "Experiencia Competitiva",
@@ -473,7 +471,7 @@ def main():
                 key='competitive_experience'
             )
         preferred_nationality = st.multiselect("Nacionalidad Preferente (Opcional)", federaciones_fifa, key='preferred_nationality')
->>>>>>> 3fd74cf9b8c335dfd6e8a68e24f9339e753fb62b
+
 
         # 7. Performance Statistics
         with st.expander("7. Performance Statistics"):
