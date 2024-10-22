@@ -278,7 +278,7 @@ def main():
                 "Playmaker",
                 "Deep-Lying Playmaker",
                 "Target Man",
-                "Poacher",
+                "Tip",
                 "Complete Forward"
             ],
                  key='position'
@@ -757,7 +757,7 @@ def main():
                 "Creador de Juego",
                 "Creador de Juego de Profundidad",
                 "Delantero Objetivo",
-                "Puntero",
+                "Punta",
                 "Delantero Completo"
             ],
                  key='position'
