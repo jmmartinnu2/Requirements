@@ -254,9 +254,33 @@ def main():
         with st.expander("1. Positions to strengthen"):
             position = st.selectbox(
                 "Select the priority position you want to strengthen",
-                ["Goalkeeper", "Center Back", "Left Back", "Right Back",
-                 "Defensive Midfielder", "Attacking Midfielder", "Left Winger",
-                 "Right Winger", "Striker"],
+                [
+                "Goalkeeper",
+                "Sweeper",
+                "Center Back",
+                "Left Center Back",
+                "Right Center Back",
+                "Left Back",
+                "Right Back",
+                "Wing Back",
+                "Defensive Midfielder",
+                "Central Midfielder",
+                "Box-to-Box Midfielder",
+                "Attacking Midfielder",
+                "Wide Midfielder",
+                "Left Winger",
+                "Right Winger",
+                "Inside Forward",
+                "Striker",
+                "Second Striker",
+                "Center Forward",
+                "False Nine",
+                "Playmaker",
+                "Deep-Lying Playmaker",
+                "Target Man",
+                "Poacher",
+                "Complete Forward"
+            ],
                  key='position'
             )
 
@@ -709,9 +733,33 @@ def main():
         with st.expander("1. Posiciones a reforzar"):
             position = st.selectbox(
                 "Seleccione la posición prioritaria que desea reforzar",
-                ["Portero", "Defensa Central", "Lateral Izquierdo", "Lateral Derecho",
-                 "Centrocampista Defensivo", "Centrocampista Ofensivo", "Extremo Izquierdo",
-                 "Extremo Derecho", "Delantero"],
+                [
+                "Portero",
+                "Líbero",
+                "Defensa Central",
+                "Defensa Central Izquierdo",
+                "Defensa Central Derecho",
+                "Lateral Izquierdo",
+                "Lateral Derecho",
+                "Carrilero",
+                "Centrocampista Defensivo",
+                "Centrocampista Central",
+                "Centrocampista Box-to-Box",
+                "Centrocampista Ofensivo",
+                "Centrocampista Extremo",
+                "Extremo Izquierdo",
+                "Extremo Derecho",
+                "Delantero Interior",
+                "Delantero",
+                "Segundo Delantero",
+                "Delantero Centro",
+                "Delantero Falso Nueve",
+                "Creador de Juego",
+                "Creador de Juego de Profundidad",
+                "Delantero Objetivo",
+                "Puntero",
+                "Delantero Completo"
+            ],
                  key='position'
             )
 
