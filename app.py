@@ -235,6 +235,50 @@ def main():
         "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United States of America", 
         "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Wales", "Yemen", "Zambia", "Zimbabwe"
     ]
+ 
+    # Lista de sistemas de juego en inglés
+    playing_systems_en = [
+        "4-4-2",
+        "4-3-3",
+        "3-5-2",
+        "4-2-3-1",
+        "3-4-3",
+        "5-3-2",
+        "4-5-1",
+        "4-3-2-1",
+        "3-4-1-2",
+        "3-6-1",
+        "4-4-1-1",
+        "4-1-4-1",
+        "4-2-2-2",
+        "4-3-3 Diamond",
+        "4-4-2 Diamond",
+        "3-4-2-1",
+        "Flexible / Dynamic",
+        "Other"
+    ]
+
+    # Lista de sistemas de juego en español
+    playing_systems_es = [
+        "4-4-2",
+        "4-3-3",
+        "3-5-2",
+        "4-2-3-1",
+        "3-4-3",
+        "5-3-2",
+        "4-5-1",
+        "4-3-2-1",
+        "3-4-1-2",
+        "3-6-1",
+        "4-4-1-1",
+        "4-1-4-1",
+        "4-2-2-2",
+        "4-3-3 Diamante",
+        "4-4-2 Diamante",
+        "3-4-2-1",
+        "Flexible / Dinámico",
+        "Otro"
+    ]    
 
     # Definir el formulario en inglés o español
     if idioma == "English":
@@ -354,6 +398,12 @@ def main():
                 ],
                 key='style_of_play'
             )
+            # Añadir Playing System
+            playing_system = st.multiselect(
+                "Playing System",
+                playing_systems_en,
+                key='playing_system'
+            )            
 
         # 3. Budget Availability
         with st.expander("3. Budget availability"):
@@ -681,6 +731,7 @@ def main():
                 "Competitive Experience": competitive_experience,
                 "Preferred Nationality": preferred_nationality,
                 "Style of Play": style_of_play,
+                "Playing System": playing_system,  # Añadido
                 "Salary Range": salary_range,
                 "Transfer Type": transfer_type,
                 "Immediate Needs": immediate_needs or "N/A",
@@ -832,6 +883,12 @@ def main():
                     "Equilibrio emocional"
                 ],
                 key='style_of_play'
+            )
+            # Añadir Sistema de Juego
+            sistema_juego = st.multiselect(
+                "Sistema de Juego",
+                playing_systems_es,
+                key='sistema_juego'
             )
 
         # 3. Disponibilidad Presupuestaria
@@ -1157,6 +1214,7 @@ def main():
                 "Experiencia Competitiva": competitive_experience,
                 "Nacionalidad Preferente": preferred_nationality,
                 "Estilo de Juego": style_of_play,
+                "Sistema de Juego": sistema_juego,  # Añadido
                 "Rango Salarial": salary_range,
                 "Tipología de Incorporación": transfer_type,
                 "Necesidad Inmediata": immediate_needs or "N/A",
